@@ -3,6 +3,8 @@ export type DateRange = {
   to?: string;
 };
 
+export type ClickAccount = '1' | '2';
+
 export type ClickCampaignRaw = {
   campaign_id: string;
   campaign_name: string;

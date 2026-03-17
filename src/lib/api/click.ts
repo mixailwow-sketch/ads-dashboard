@@ -1,4 +1,4 @@
-import { ClickCampaignRaw, DateRange } from '@/types/analytics';
+import { ClickAccount, ClickCampaignRaw, DateRange } from '@/types/analytics';
 
 const CLICK_API_BASE = 'https://click.ru/agency/user';
 
@@ -7,12 +7,15 @@ const toNumber = (value: unknown): number => {
   return Number.isFinite(n) ? n : 0;
 };
 
-export async function fetchClickCampaigns(range: DateRange = {}): Promise<ClickCampaignRaw[]> {
-  const token = process.env.CLICK_API_TOKEN;
+function resolveClickToken(account?: ClickAccount): string {
+  if (account === '1' && process.env.CLICK_API_TOKEN_1) return process.env.CLICK_API_TOKEN_1;
+  if (account === '2' && process.env.CLICK_API_TOKEN_2) return process.env.CLICK_API_TOKEN_2;
+  if (process.env.CLICK_API_TOKEN) return process.env.CLICK_API_TOKEN;
+  throw new Error('Click.ru token is not configured (set CLICK_API_TOKEN and/or CLICK_API_TOKEN_1/2)');
+}
 
-  if (!token) {
-    throw new Error('CLICK_API_TOKEN is not configured');
-  }
+export async function fetchClickCampaigns(range: DateRange = {}, account?: ClickAccount): Promise<ClickCampaignRaw[]> {
+  const token = resolveClickToken(account);
 
   const params = new URLSearchParams();
   if (range.from) params.set('from', range.from);

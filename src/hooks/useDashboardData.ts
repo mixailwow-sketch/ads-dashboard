@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DashboardResponse } from '@/types/analytics';
+import { ClickAccount, DashboardResponse } from '@/types/analytics';
 
 type State = {
   data: DashboardResponse | null;
@@ -12,6 +12,7 @@ type State = {
 export function useDashboardData() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [account, setAccount] = useState<ClickAccount>('1');
   const [campaignFilter, setCampaignFilter] = useState('');
   const [state, setState] = useState<State>({ data: null, isLoading: true, error: null });
 
@@ -20,10 +21,11 @@ export function useDashboardData() {
 
     try {
       const params = new URLSearchParams();
+      params.set('account', account);
       if (from) params.set('from', from);
       if (to) params.set('to', to);
 
-      const res = await fetch(`/api/dashboard${params.toString() ? `?${params.toString()}` : ''}`);
+      const res = await fetch(`/api/dashboard?${params.toString()}`);
       const payload = await res.json();
 
       if (!res.ok) {
@@ -34,7 +36,7 @@ export function useDashboardData() {
     } catch (error) {
       setState({ data: null, isLoading: false, error: error instanceof Error ? error.message : 'Unknown error' });
     }
-  }, [from, to]);
+  }, [account, from, to]);
 
   useEffect(() => {
     void load();
@@ -54,9 +56,11 @@ export function useDashboardData() {
     data: filteredData,
     from,
     to,
+    account,
     campaignFilter,
     setFrom,
     setTo,
+    setAccount,
     setCampaignFilter,
     refresh: load,
   };

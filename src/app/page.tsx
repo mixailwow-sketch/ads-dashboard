@@ -9,7 +9,7 @@ import { WarningsPanel } from '@/components/WarningsPanel';
 import { useDashboardData } from '@/hooks/useDashboardData';
 
 export default function DashboardPage() {
-  const { data, isLoading, error, from, to, campaignFilter, setFrom, setTo, setCampaignFilter, refresh } = useDashboardData();
+  const { data, isLoading, error, from, to, account, campaignFilter, setFrom, setTo, setAccount, setCampaignFilter, refresh } = useDashboardData();
 
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-4 p-4 md:p-8">
@@ -21,9 +21,11 @@ export default function DashboardPage() {
       <FiltersBar
         from={from}
         to={to}
+        account={account}
         campaignFilter={campaignFilter}
         setFrom={setFrom}
         setTo={setTo}
+        setAccount={setAccount}
         setCampaignFilter={setCampaignFilter}
         onRefresh={refresh}
       />
