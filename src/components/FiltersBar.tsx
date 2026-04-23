@@ -12,17 +12,21 @@ type Props = {
 
 export function FiltersBar({ from, to, campaignFilter, setFrom, setTo, setCampaignFilter, onRefresh }: Props) {
   return (
-    <section className="card grid gap-3 md:grid-cols-4">
-      <input className="rounded-lg border border-slate-300 px-3 py-2" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
-      <input className="rounded-lg border border-slate-300 px-3 py-2" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
-      <input
-        className="rounded-lg border border-slate-300 px-3 py-2"
-        placeholder="Фильтр по названию кампании"
-        value={campaignFilter}
-        onChange={(e) => setCampaignFilter(e.target.value)}
-      />
-      <button onClick={onRefresh} className="rounded-lg bg-brand px-4 py-2 font-medium text-white hover:bg-blue-700" type="button">
-        Refresh
+    <section className="card grid w-full gap-3 md:grid-cols-4 xl:max-w-3xl">
+      <label className="filter-field">
+        <span>Начало</span>
+        <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
+      </label>
+      <label className="filter-field">
+        <span>Конец</span>
+        <input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+      </label>
+      <label className="filter-field md:col-span-2">
+        <span>Кампания</span>
+        <input placeholder="Фильтр по названию кампании" value={campaignFilter} onChange={(e) => setCampaignFilter(e.target.value)} />
+      </label>
+      <button onClick={onRefresh} className="btn-primary md:col-span-4" type="button">
+        Обновить данные
       </button>
     </section>
   );
