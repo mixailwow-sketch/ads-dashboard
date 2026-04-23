@@ -12,21 +12,23 @@ export default function DashboardPage() {
   const { data, isLoading, error, from, to, campaignFilter, setFrom, setTo, setCampaignFilter, refresh } = useDashboardData();
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-4 p-4 md:p-8">
-      <header>
-        <h1 className="text-3xl font-bold">Ads Performance Dashboard</h1>
-        <p className="text-slate-600">Click.ru + Google Sheets unified analytics</p>
-      </header>
+    <main className="dashboard-shell">
+      <header className="dashboard-header">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight text-slate-900">Анализ посевов</h1>
+          <p className="mt-2 text-lg text-slate-500">Анализ эффективности рекламных посевов по пабликам и каналам</p>
+        </div>
 
-      <FiltersBar
-        from={from}
-        to={to}
-        campaignFilter={campaignFilter}
-        setFrom={setFrom}
-        setTo={setTo}
-        setCampaignFilter={setCampaignFilter}
-        onRefresh={refresh}
-      />
+        <FiltersBar
+          from={from}
+          to={to}
+          campaignFilter={campaignFilter}
+          setFrom={setFrom}
+          setTo={setTo}
+          setCampaignFilter={setCampaignFilter}
+          onRefresh={refresh}
+        />
+      </header>
 
       {isLoading ? <div className="card">Загрузка данных...</div> : null}
       {error ? <div className="card border border-red-300 text-red-700">Ошибка: {error}</div> : null}
@@ -34,10 +36,16 @@ export default function DashboardPage() {
       {data ? (
         <>
           <KpiCards summary={data.summary} />
-          <PerformanceChart data={data.series} />
-          <CampaignTable campaigns={data.campaigns} />
-          <AnalyticsBlock summary={data.summary} />
-          <WarningsPanel warnings={data.warnings} />
+
+          <section className="dashboard-grid">
+            <AnalyticsBlock summary={data.summary} campaigns={data.campaigns} />
+            <PerformanceChart data={data.series} />
+          </section>
+
+          <section className="dashboard-grid">
+            <CampaignTable campaigns={data.campaigns} />
+            <WarningsPanel warnings={data.warnings} />
+          </section>
         </>
       ) : null}
     </main>
